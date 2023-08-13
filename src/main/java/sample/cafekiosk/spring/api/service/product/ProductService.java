@@ -34,13 +34,11 @@ public class ProductService {
 
     @Transactional
     public ProductResponse createProduct(ProductCreateRequest request) {
-        return ProductResponse.builder()
-            .productNumber(createNextProductNumber())
-            .type(request.getType())
-            .sellingStatus(request.getSellingStatus())
-            .name(request.getName())
-            .price(request.getPrice())
-            .build();
+
+        Product product = request.toEntity(createNextProductNumber());
+        Product savedProduct = productRepository.save(product);
+
+        return ProductResponse.of(savedProduct);
     }
 
     private String createNextProductNumber() {
