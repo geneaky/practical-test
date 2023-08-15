@@ -49,7 +49,7 @@ class ProductServiceTest {
             .price(5000)
             .build();
 
-        ProductResponse response = productService.createProduct(request);
+        ProductResponse response = productService.createProduct(request.toServiceRequest());
 
         assertThat(response)
             .extracting("productNumber", "type", "sellingStatus", "name", "price")
@@ -66,13 +66,12 @@ class ProductServiceTest {
             .price(5000)
             .build();
 
-        ProductResponse response = productService.createProduct(request);
+        ProductResponse response = productService.createProduct(request.toServiceRequest());
 
         assertThat(response)
             .extracting("productNumber", "type", "sellingStatus", "name", "price")
             .contains("001", HANDMADE, SELLING, "카푸치노", 5000);
     }
-
 
     private Product createProduct(String number, ProductType type, ProductSellingStatus status, String name, int price) {
         return Product.builder()

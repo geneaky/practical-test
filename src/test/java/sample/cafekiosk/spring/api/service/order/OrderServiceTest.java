@@ -60,7 +60,7 @@ class OrderServiceTest {
             .build();
 
         LocalDateTime registeredDateTime = LocalDateTime.now();
-        OrderResponse orderResponse = orderService.createOrder(request, registeredDateTime);
+        OrderResponse orderResponse = orderService.createOrder(request.toServiceRequest(), registeredDateTime);
 
         assertThat(orderResponse.getId()).isNotNull();
         assertThat(orderResponse)
@@ -86,7 +86,7 @@ class OrderServiceTest {
             .build();
 
         LocalDateTime registeredDateTime = LocalDateTime.now();
-        OrderResponse orderResponse = orderService.createOrder(request, registeredDateTime);
+        OrderResponse orderResponse = orderService.createOrder(request.toServiceRequest(), registeredDateTime);
 
         assertThat(orderResponse.getId()).isNotNull();
         assertThat(orderResponse)
@@ -126,7 +126,7 @@ class OrderServiceTest {
             .build();
 
         LocalDateTime registeredDateTime = LocalDateTime.now();
-        OrderResponse orderResponse = orderService.createOrder(request, registeredDateTime);
+        OrderResponse orderResponse = orderService.createOrder(request.toServiceRequest(), registeredDateTime);
 
         assertThat(orderResponse.getId()).isNotNull();
         assertThat(orderResponse)
@@ -169,7 +169,7 @@ class OrderServiceTest {
         LocalDateTime registeredDateTime = LocalDateTime.now();
 
         assertThatThrownBy(() -> {
-            orderService.createOrder(request, registeredDateTime);
+            orderService.createOrder(request.toServiceRequest(), registeredDateTime);
         }).isInstanceOf(IllegalArgumentException.class);
     }
 }
