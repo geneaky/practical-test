@@ -1,5 +1,6 @@
 package sample.cafekiosk.spring.domain.order;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sample.cafekiosk.spring.domain.BaseEntity;
@@ -39,8 +41,9 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderProduct> orderProductList = new ArrayList<>();
 
-    public Order(List<Product> products, LocalDateTime registeredDAteTime) {
-        this.orderStatus = OrderStatus.INIT;
+    @Builder
+    public Order(List<Product> products, OrderStatus orderStatus, LocalDateTime registeredDAteTime) {
+        this.orderStatus = orderStatus;
         this.totalPrice = calculateTotalPrice(products);
         this.registeredDAteTime = registeredDAteTime;
         this.orderProductList = products.stream()
@@ -55,6 +58,10 @@ public class Order extends BaseEntity {
     }
 
     public static Order create(List<Product> products, LocalDateTime registeredDAteTime) {
-        return new Order(products, registeredDAteTime);
+        return Order.builder()
+            .orderStatus(OrderStatus.INIT)
+            .products(products)
+            .registeredDAteTime(registeredDAteTime)
+            .build();
     }
 }

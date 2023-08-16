@@ -56,7 +56,6 @@ class ProductServiceTest {
             .contains("004", HANDMADE, SELLING, "카푸치노", 5000);
     }
 
-
     @Test
     void createProduct2() throws Exception {
         ProductCreateRequest request = ProductCreateRequest.builder()
