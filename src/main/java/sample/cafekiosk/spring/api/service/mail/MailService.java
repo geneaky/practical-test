@@ -24,8 +24,11 @@ public class MailService {
                 .build()
             );
 
-            return result;
+            mailSendClient.a();
+            mailSendClient.b();
+            mailSendClient.c();
+            return true;
         }
-        return result;
+        return false;
     }
 }
