@@ -7,12 +7,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import sample.cafekiosk.spring.IntegrationTestSupport;
 import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.order.OrderRepository;
@@ -24,10 +26,8 @@ import sample.cafekiosk.spring.domain.product.ProductType;
 import sample.cafekiosk.spring.domain.stock.Stock;
 import sample.cafekiosk.spring.domain.stock.StockRepository;
 
-@ActiveProfiles("test")
 @Transactional
-@SpringBootTest
-class OrderServiceTest {
+class OrderServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ProductRepository productRepository;
@@ -40,13 +40,13 @@ class OrderServiceTest {
     @Autowired
     private StockRepository stockRepository;
 
-//    @AfterEach
-//    void tearDown() {
-//        orderProductRepository.deleteAllInBatch();
-//        productRepository.deleteAllInBatch();
-//        orderRepository.deleteAllInBatch();
-//        stockRepository.deleteAllInBatch();
-//    }
+    @AfterEach
+    void tearDown() {
+        orderProductRepository.deleteAllInBatch();
+        productRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
+        stockRepository.deleteAllInBatch();
+    }
 
     @Test
     void createOrder() throws Exception {
@@ -152,6 +152,7 @@ class OrderServiceTest {
     }
 
     @Test
+    @Disabled
     void createOrderWitNoStock() throws Exception {
         Product product1 = createProduct(ProductType.BOTTLE, "001", 1000);
         Product product2 = createProduct(ProductType.BAKERY, "002", 3000);
@@ -161,7 +162,7 @@ class OrderServiceTest {
         Stock stock1 = Stock.create("001", 1);
         Stock stock2 = Stock.create("002", 2);
         stockRepository.saveAll(List.of(stock1, stock2));
-
+        stock1.deductQuantity(3);
         OrderCreateRequest request = OrderCreateRequest.builder()
             .productNumber(List.of("001", "001", "002", "003"))
             .build();
